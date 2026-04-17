@@ -1,208 +1,188 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Barbearia Nego Brabo - Agendamento</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<title>Recado 🌹</title>
+
+<style>
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #1a1a2e, #16213e, #000);
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+  text-align: center;
+}
+
+/* botão */
+button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 15px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 30px;
+  background: #ff4d6d;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* mensagem */
+.mensagem {
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  font-size: 28px;
+  opacity: 0;
+  transition: 2s;
+}
+
+canvas {
+  display: none;
+}
+</style>
 </head>
+
 <body>
-  <header class="navbar">
-    <div class="logo">
-      <!-- substitua pelo seu logo -->
-      <img src="logo.png" alt="Logo Barbearia Nego Brabo" class="logo-img">
-      <div>
-        <h1>Barbearia <span>Nego Brabo</span></h1>
-        <p class="tagline">Estilo, precisão e atitude</p>
-      </div>
-    </div>
 
-    <nav class="nav-links">
-      <a href="#about">Sobre</a>
-      <a href="#gallery">Cortes</a>
-      <a href="#services">Serviços</a>
-      <a href="#form-section">Agendamento</a>
-    </nav>
-  </header>
+<button onclick="iniciar()">Abrir recado 💌</button>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-inner">
-      <h2>Agende seu horário</h2>
-      <p>Atendimento profissional com os melhores cortes e serviços.</p>
-    </div>
-  </section>
+<canvas width="900" height="550"></canvas>
 
-  <!-- ABOUT / BARBEIROS -->
-  <section id="about" class="about container">
-    <h2>Nossos Barbeiros</h2>
-    <div class="barbers">
-      <article class="barber-card">
-        <img src="https://i.imgur.com/x8pmXQn.jpeg" alt="Nego Brabo - Barbeiro">
-        <h3>Nego Brabo</h3>
-        <p>Especialista em degradê, desenhos e barba clássica — 10 anos de experiência.</p>
-      </article>
+<div class="mensagem" id="msg">
+  Flavin cesar de conduru,<br>
+  vc deixou vazar seu email
+</div>
 
-      <article class="barber-card">
-        <img src="https://i.imgur.com/6NBvV8h.jpeg" alt="Junin Fade - Barbeiro">
-        <h3>Junin Fade</h3>
-        <p>Foco em cortes modernos, pigmentação e acabamento milimétrico.</p>
-      </article>
-    </div>
-  </section>
+<script>
+const canvas = document.querySelector("canvas");
+const ctx = canvas.getContext("2d");
 
-  <!-- GALLERY CAROUSEL (10 imagens) -->
-  <section id="gallery" class="gallery container">
-    <h2>Catálogo de Cortes</h2>
-    <div class="carousel" aria-hidden="false">
-      <!-- 10 imagens de exemplo - troque pelas suas -->
-      <div class="carousel-track">
-        <img src="https://i.ibb.co/MyV1TJfS/Whats-App-Image-2025-12-19-at-14-28-39-1.jpg" alt="Corte 1">
-        <img src="https://i.ibb.co/r2MD2ggf/Whats-App-Image-2025-12-19-at-14-28-39.jpg" alt="Corte 2">
-        <img src="https://i.ibb.co/BHQZZXWp/Whats-App-Image-2025-12-19-at-14-28-40-1.jpg" alt="Corte 3">
-        <img src="https://i.ibb.co/b0KVStK/Whats-App-Image-2025-12-19-at-14-28-40-2.jpg" alt="Corte 4">
-        <img src="https://i.ibb.co/5gGSfWP5/Whats-App-Image-2025-12-19-at-14-28-40-3.jpg" alt="Corte 5">
-        <img src="https://i.ibb.co/1fwHPkSG/Whats-App-Image-2025-12-19-at-14-28-40.jpg" alt="Corte 6">
-        <img src="https://i.ibb.co/gbchzYZC/Whats-App-Image-2025-12-19-at-14-28-41.jpg" alt="Corte 7">
-        <img src="https://i.ibb.co/NdkjWYPt/Whats-App-Image-2025-12-19-at-14-28-42.jpg" alt="Corte 8">
-        <img src="https://images.unsplash.com/photo-1562157871-818bc0726c5d?w=1200&q=80" alt="Corte 9">
-        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=1200&q=80" alt="Corte 10">
-      </div>
-    </div>
-  </section>
+let flores = [];
+let particulas = [];
+let iniciado = false;
 
-  <!-- SERVICES (todos os já listados) -->
-  <section id="services" class="services container">
-    <h2>Nossos Serviços</h2>
-    <div class="services-grid">
-      <!-- mantenha os mesmos nomes/valores que você havia passado -->
-      <div class="service-card"><div class="svc-title">Corte</div><div class="svc-price">R$ 30,00</div></div>
-      <div class="service-card"><div class="svc-title">Barba</div><div class="svc-price">R$ 20,00</div></div>
-      <div class="service-card"><div class="svc-title">Hidratação</div><div class="svc-price">R$ 30,00</div></div>
-      <div class="service-card"><div class="svc-title">Escovinha</div><div class="svc-price">R$ 20,00</div></div>
-      <div class="service-card"><div class="svc-title">Pezinho</div><div class="svc-price">R$ 7,00</div></div>
-      <div class="service-card"><div class="svc-title">Desenho</div><div class="svc-price">R$ 10,00</div></div>
-      <div class="service-card"><div class="svc-title">Sobrancelha</div><div class="svc-price">R$ 7,00</div></div>
-      <div class="service-card"><div class="svc-title">Pigmentação</div><div class="svc-price">R$ 30,00</div></div>
-      <div class="service-card"><div class="svc-title">Textura</div><div class="svc-price">R$ 30,00</div></div>
-      <div class="service-card"><div class="svc-title">Luzes</div><div class="svc-price">R$ 50,00</div></div>
-      <div class="service-card"><div class="svc-title">Progressiva</div><div class="svc-price">R$ 100,00</div></div>
-      <div class="service-card"><div class="svc-title">Nevou</div><div class="svc-price">R$ 150,00</div></div>
-    </div>
-  </section>
+// cria flor "fechada"
+function criarFlor(x, y) {
+  return {
+    x,
+    y,
+    abertura: 0, // 0 fechada → 1 aberta
+    cor: ["#ff8fa3", "#c9184a"]
+  };
+}
 
-  <!-- FORMULÁRIO DE AGENDAMENTO (com checkboxes e soma) -->
-  <section id="form-section" class="form-section container">
-    <h2>Agende seu horário</h2>
+// desenha pétala
+function desenharPetala(flor, angulo) {
+  ctx.save();
+  ctx.translate(flor.x, flor.y);
+  ctx.rotate(angulo);
 
-    <form id="appointmentForm" autocomplete="off">
-      <div class="form-row">
-        <label for="clientName">Nome do cliente</label>
-        <input id="clientName" name="clientName" type="text" placeholder="Seu nome" required>
-      </div>
+  const grad = ctx.createRadialGradient(0, 0, 5, 0, 0, 20);
+  grad.addColorStop(0, flor.cor[0]);
+  grad.addColorStop(1, flor.cor[1]);
 
-      <div class="form-row">
-        <label for="clientPhone">Telefone (WhatsApp)</label>
-        <input id="clientPhone" name="clientPhone" type="tel" placeholder="(99) 9xxxx-xxxx" required>
-      </div>
+  ctx.fillStyle = grad;
 
-      <div class="form-row two-cols">
-        <div>
-          <label for="date">Data</label>
-          <input id="date" name="date" type="date" required>
-        </div>
-        <div>
-          <label for="time">Horário</label>
-          <select id="time" name="time" required></select>
-        </div>
-      </div>
+  ctx.beginPath();
+  ctx.ellipse(
+    0,
+    -20 * flor.abertura,
+    10,
+    20 * flor.abertura,
+    0,
+    0,
+    Math.PI * 2
+  );
+  ctx.fill();
 
-      <fieldset>
-        <legend>Escolha seus serviços</legend>
-        <div class="services-select" id="servicesList">
-          <!-- JS preencherá checkboxes com data-price -->
-        </div>
-      </fieldset>
+  ctx.restore();
+}
 
-      <div class="form-row">
-        <label>Forma de pagamento</label>
-        <div class="pay-options">
-          <label><input type="radio" name="payment" value="PIX" checked> PIX</label>
-          <label><input type="radio" name="payment" value="Dinheiro"> Dinheiro</label>
-          <label><input type="radio" name="payment" value="Cartão"> Cartão</label>
-        </div>
-      </div>
+// desenha flor completa
+function desenharFlor(flor) {
+  for (let i = 0; i < 8; i++) {
+    desenharPetala(flor, (Math.PI * 2 / 8) * i);
+  }
 
-      <p id="total">Total: R$ 0,00</p>
+  // miolo
+  ctx.fillStyle = "gold";
+  ctx.beginPath();
+  ctx.arc(flor.x, flor.y, 5, 0, Math.PI * 2);
+  ctx.fill();
 
-      <div class="form-actions">
-        <button type="button" id="btnProceed" class="btn-primary">Agendar e Pagar</button>
-      </div>
-    </form>
-  </section>
+  // haste
+  ctx.fillStyle = "#2ecc71";
+  ctx.fillRect(flor.x - 2, flor.y, 4, 100);
+}
 
-  <!-- POPUP PIX (QR grande + chave + copiar) -->
-  <div id="pixModal" class="modal hidden" role="dialog" aria-hidden="true">
-    <div class="modal-inner">
-      <button id="closeModal" class="modal-close" aria-label="Fechar">✕</button>
-      <h3>Pagamento via PIX</h3>
+// partículas
+function criarParticula() {
+  particulas.push({
+    x: Math.random() * 900,
+    y: 550,
+    v: Math.random() * 2 + 1
+  });
+}
 
-      <!-- QR grande e centralizado -->
-      <div class="qr-wrapper">
-        <img id="pixQrImg" alt="QR Code PIX" class="pix-qr">
-      </div>
+function desenharParticulas() {
+  particulas.forEach(p => {
+    ctx.fillStyle = "white";
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+    p.y -= p.v;
+  });
 
-      <!-- Chave PIX abaixo do QR -->
-      <p class="pix-label">Chave PIX:</p>
-      <div class="pix-row">
-        <input id="pixKeyInput" class="pix-key" readonly>
-        <button id="copyPixBtn" class="btn-secondary">Copiar</button>
-      </div>
+  particulas = particulas.filter(p => p.y > 0);
+}
 
-      <p class="pix-instruction">Após o pagamento, clique em "Confirmar e Enviar pelo WhatsApp" para enviar seus dados ao atendimento.</p>
+// animação
+function animar() {
+  ctx.fillStyle = "rgba(0,0,0,0.2)";
+  ctx.fillRect(0, 0, 900, 550);
 
-      <div class="modal-actions">
-        <button id="confirmSendBtn" class="btn-primary">Confirmar e Enviar pelo WhatsApp</button>
-      </div>
-    </div>
-  </div>
+  flores.forEach(f => {
+    if (f.abertura < 1) f.abertura += 0.02; // desabrochar
+    desenharFlor(f);
+  });
 
-  <!-- MAPA / LOCALIZAÇÃO -->
-  <section class="location container" id="location">
-    <h2>Onde nos encontrar</h2>
-    <p>Avenida Fernão Dias 999, Jardim Laguna - Contagem</p>
-    <div class="map-wrap">
-      <iframe
-        src="https://www.google.com/maps?q=Avenida%20Fern%C3%A3o%20Dias%20999%20Jardim%20Laguna%20Contagem&output=embed"
-        allowfullscreen=""
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
-  </section>
+  desenharParticulas();
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-inner container">
-      <div>
-        <h4>Barbearia Nego Brabo</h4>
-        <p>Avenida Fernão Dias 999, Jardim Laguna - Contagem</p>
-        <p>Horário: Seg–Sáb 09:00–19:00</p>
-      </div>
-      <div>
-        <p>Contato</p>
-        <p>WhatsApp: <a href="https://wa.me/5531990723954" target="_blank" rel="noreferrer">+55 31 99072-3954</a></p>
-      </div>
-    </div>
-  </footer>
+  requestAnimationFrame(animar);
+}
 
-  <!-- BOTÃO FLUTUANTE WHATSAPP -->
-  <a class="whatsapp-float" href="https://wa.me/5531990723954" target="_blank" aria-label="WhatsApp">
-    <svg viewBox="0 0 24 24" width="28" height="28" fill="white" aria-hidden="true">
-      <path d="M20.52 3.48A11.92 11.92 0 0012 .5 11.92 11.92 0 003.48 3.48 11.92 11.92 0 00.5 12c0 2.02.53 3.95 1.53 5.66L.5 23.5l5.02-1.33A11.92 11.92 0 0012 23.5c2.02 0 3.95-.53 5.66-1.53A11.92 11.92 0 0023.5 12c0-3.2-1.25-6.24-3.0-8.52zM12 21.5c-1.9 0-3.76-.5-5.34-1.44l-.38-.22-3.0.8.8-3.0-.22-.38A9.5 9.5 0 012.5 12 9.5 9.5 0 0112 2.5 9.5 9.5 0 0121.5 12 9.5 9.5 0 0112 21.5z"/>
-      <path d="M17.3 14.1c-.3-.1-1.8-.9-2.1-.9-.3 0-.5.0-.8.1-.2.1-.6.3-1 .5-.5.3-.9.3-1.3-.2-.4-.5-1.6-1.9-2.2-2.6-.5-.6-.1-.9.1-1.2.1-.1.3-.3.4-.5.2-.1.3-.3.5-.5.1-.1.1-.3.1-.5 0-.2-.9-2.1-1.2-2.9-.3-.8-.6-.7-1-.7h-.8c-.2 0-.5.1-.8.4-.3.3-1.1 1.1-1.1 2.6 0 1.4 1.1 2.8 1.2 3 .1.2 1.9 3.1 4.6 4.2 2.7 1.2 2.7 1 3.2 1 0 0 1.2 0 1.4-.7.2-.7.2-1.2.1-1.3-.1-.2-.4-.3-.7-.4z"/>
-    </svg>
-  </a>
+// iniciar experiência
+function iniciar() {
+  document.querySelector("button").style.display = "none";
+  canvas.style.display = "block";
 
-  <script src="script.js"></script>
+  // cria várias flores
+  const pos = [
+    [450,180],[350,220],[550,220],
+    [300,260],[600,260],
+    [400,300],[500,300],
+    [250,320],[650,320]
+  ];
+
+  pos.forEach(p => flores.push(criarFlor(p[0], p[1])));
+
+  setInterval(criarParticula, 200);
+  animar();
+
+  // mostra mensagem depois
+  setTimeout(() => {
+    document.getElementById("msg").style.opacity = 1;
+  }, 2500);
+}
+</script>
+
 </body>
 </html>
